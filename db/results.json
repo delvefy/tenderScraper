@@ -1,0 +1,368 @@
+[
+  {
+    "id": "28a47534-96ad-47a5-afa8-d33d77e05be0",
+    "monitorId": "e70df1b5-df1f-4480-b348-4f2c27bf6084",
+    "runAt": "2026-03-22T19:18:57.771Z",
+    "provider": "groq",
+    "findings": [
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/29309/enotice/43960/",
+        "found": true,
+        "confidence": "high",
+        "summary": "The page contains a prior information notice from Tulli for laboratory scales with IT system integration for Finnish Customs",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/29309/enotice/43960/"
+        ],
+        "hilma": {
+          "title": "Laboratorio vaaka",
+          "org": "Tulli",
+          "deadline": "2026-03-31T13:00:00Z",
+          "published": "2026-03-17T13:24:40.574Z",
+          "winners": "",
+          "totalValue": null,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-03-31T13:00:00Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/22919/enotice/41705/",
+        "found": true,
+        "confidence": "high",
+        "summary": "This is a procurement notice from Tulli (Finnish Customs) for an Automatic Migration Tester, which is an IT system used for laboratory testing",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/22919/enotice/41705/"
+        ],
+        "hilma": {
+          "title": "Procurement of Automatic Migration Tester and maintenance agreement",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-22T08:05:03.613Z",
+          "winners": "Kvalitest Industrial Oy (2262140-6)",
+          "totalValue": 125000,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-22T08:05:03.613Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27170/enotice/40721/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page contains a contract award notice from Tulli, but it is for transportation services, not IT systems, software, document management, or communications infrastructure.",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27170/enotice/40721/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Holiday Inn Messukeskus, Helsinki - Vuosaari V6 - Holiday Inn Messukeskus, Helsinki, 12.02.2026, Diaari 11145",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:18.387Z",
+          "winners": "Jalon Liikenne Oy (0459123-1)",
+          "totalValue": 199.6,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:18.387Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27169/enotice/40720/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page does not announce a government/public procurement bid, tender, or RFP for IT systems, software, document management, or communications infrastructure, but rather appears to be a contract award notice for transportation services",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27169/enotice/40720/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Holiday Inn Messukeskus, Helsinki - Vuosaari V6 - Holiday Inn Messukeskus, Helsinki, 11.02.2026, Diaari 11144",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:18.159Z",
+          "winners": "Jalon Liikenne Oy (0459123-1)",
+          "totalValue": 199.6,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:18.159Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27168/enotice/40719/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page is a contract award notice from Tulli for transportation services, not related to IT systems, software, document management, or communications infrastructure",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27168/enotice/40719/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Koirakoulu, Veikkola - Pasila, 18.11.2025, Diaari 10883",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:17.957Z",
+          "winners": "Kuljetus Lakkapää Oy (2499374-8)",
+          "totalValue": 284,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:17.957Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27167/enotice/40718/",
+        "found": false,
+        "confidence": "high",
+        "summary": "This page does not contain a procurement notice from Tulli for IT systems, software, document management, or communications infrastructure, but rather a contract award notice for transportation services.",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27167/enotice/40718/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Lentorahti - Vuosaari V6 - Lentorahti - Vuosaari V6 - Pasila, 7.10.2025, Diaari 10742",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:17.75Z",
+          "winners": "Jalon Liikenne Oy (0459123-1)",
+          "totalValue": 368.2,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:17.75Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27166/enotice/40717/",
+        "found": false,
+        "confidence": "high",
+        "summary": "This is a contract award notice from Tulli, but it's for transportation services, not IT systems, software, document management, or communications infrastructure.",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27166/enotice/40717/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasilan virastokeskus - Santahamina - Pasilan virastokeskus, 10.10.2025, Diaari 10705",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:17.49Z",
+          "winners": "Lehtimäen Liikenne Oy (0151275-3)",
+          "totalValue": 361,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:17.49Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27165/enotice/40716/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page does not contain a procurement notice for IT systems, software, document management, or communications infrastructure from Tulli, but rather a contract award notice for transportation services",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27165/enotice/40716/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Lentorahti - Vuosaari - Lentorahti - Vuosaari - Pasila, 12.3.2025, Diaari 9888",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:17.3Z",
+          "winners": "Lehtimäen Liikenne Oy (0151275-3)",
+          "totalValue": 440,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:17.3Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27163/enotice/40714/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The notice is for contract award of transportation services, not related to IT systems, software, document management, or communications infrastructure.",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27163/enotice/40714/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Lentorahti - Vuosaari - Lentorahti - Vuosaari - Pasila, 11.3.2025, Diaari 9887",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:16.73Z",
+          "winners": "Lehtimäen Liikenne Oy (0151275-3)",
+          "totalValue": 440,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:16.73Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27162/enotice/40713/",
+        "found": false,
+        "confidence": "high",
+        "summary": "This page announces a contract award notice for logistics services from Tulli, not IT systems, software, document management, or communications infrastructure",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27162/enotice/40713/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Posti Vantaan logistiikkakeskus - Pasila, 6.3.2025, Diaari 9886",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:16.173Z",
+          "winners": "Liikenne Seppälä Oy (1109737-0)",
+          "totalValue": 144,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:16.173Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27161/enotice/40712/",
+        "found": false,
+        "confidence": "high",
+        "summary": "This page contains a contract award notice from Tulli for transport services, not for IT systems, software, document management, or communications infrastructure",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27161/enotice/40712/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Vuosaari V6 - Pasila, 5.3.2025, Diaari 9875",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:15.652Z",
+          "winners": "Linjaliikenne Martti Laurila Oy (0160960-0)//Ventoniemi Oy (0131640-2)",
+          "totalValue": 248,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:15.652Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27159/enotice/40710/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page does not contain a procurement notice for IT systems, software, document management, or communications infrastructure from Tulli, but rather a contract award notice for logistics services",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27159/enotice/40710/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Posti Vantaan logistiikkakeskus - Pasila, 4.3.2025, Diaari 9874",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:15.192Z",
+          "winners": "Linjaliikenne Martti Laurila Oy (0160960-0)//Ventoniemi Oy (0131640-2)",
+          "totalValue": 228,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:15.192Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27158/enotice/40709/",
+        "found": false,
+        "confidence": "high",
+        "summary": "This page appears to be a contract award notice for transportation services, not related to IT systems, software, document management, or communications infrastructure",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27158/enotice/40709/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasila - Vuosaari V6 - Pasila, 3.3.2025, Diaari 9873",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:14.738Z",
+          "winners": "Linjaliikenne Martti Laurila Oy (0160960-0)//Ventoniemi Oy (0131640-2)",
+          "totalValue": 248,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:14.738Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27148/enotice/40698/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page appears to be a contract award notice for transportation services, not related to IT systems, software, document management, or communications infrastructure",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27148/enotice/40698/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Holiday Inn Messukeskus - Tullilaboratorio, Espoo - Holiday Inn Messukeskus, 15.1.2026, Diaari 11068",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:13.562Z",
+          "winners": "Jalon Liikenne Oy (0459123-1)",
+          "totalValue": 241,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:13.562Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/27146/enotice/40696/",
+        "found": false,
+        "confidence": "high",
+        "summary": "The page contains a contract award notice from Tulli, but it is for transportation services, not IT systems, software, document management, or communications infrastructure",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/27146/enotice/40696/"
+        ],
+        "hilma": {
+          "title": "Tilausajopalvelut 2021–2026, Pasilan virastokeskus - Porvoon käräjäoikeus - Pasilan virastokeskus, 11.4.2025, Diaari 9917",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-12T04:05:13.246Z",
+          "winners": "Linjaliikenne Martti Laurila Oy (0160960-0)//Ventoniemi Oy (0131640-2)",
+          "totalValue": 452.8,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-12T04:05:13.246Z"
+        }
+      },
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/3989/enotice/40431/",
+        "found": true,
+        "confidence": "high",
+        "summary": "This is a procurement notice from Tulli (Finnish Customs) for a LIMS Laboratory Information Management system, which falls under the IT systems and software category",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/3989/enotice/40431/"
+        ],
+        "hilma": {
+          "title": "LIMS Laboratory Information Management system (LABBIS)",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2026-02-10T04:05:05.286Z",
+          "winners": "iVention BV (NL823190122B01)",
+          "totalValue": 771799.84,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-08-10T04:05:05.286Z"
+        }
+      }
+    ]
+  },
+  {
+    "id": "a1890867-73e3-4593-afb5-958e75583a87",
+    "monitorId": "f1a2b3c4-d5e6-7890-abcd-ef1234567890",
+    "runAt": "2026-03-22T19:18:43.898Z",
+    "provider": "groq",
+    "findings": [
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/7075/enotice/37258/",
+        "found": true,
+        "confidence": "high",
+        "summary": "The procurement notice mentions DocPath Document Solutions as the winner/provider of a contract award notice for an XML-PDF converter system",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/7075/enotice/37258/"
+        ],
+        "hilma": {
+          "title": "XML-PDF-muunnin",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2025-12-31T04:05:02.558Z",
+          "winners": "DocPath Document Solutions S.L (B81771800)",
+          "totalValue": 2000000,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-06-30T04:05:02.558Z"
+        }
+      }
+    ]
+  },
+  {
+    "id": "e467a561-5b39-4563-bd86-a911f6507abc",
+    "monitorId": "f1a2b3c4-d5e6-7890-abcd-ef1234567890",
+    "runAt": "2026-03-22T19:15:50.034Z",
+    "provider": "groq",
+    "findings": [
+      {
+        "url": "https://www.hankintailmoitukset.fi/fi/public/procedure/7075/enotice/37258/",
+        "found": true,
+        "confidence": "high",
+        "summary": "DocPath Document Solutions is mentioned as the winner/provider of a contract award notice for an XML-PDF converter system",
+        "links": [
+          "https://www.hankintailmoitukset.fi/fi/public/procedure/7075/enotice/37258/"
+        ],
+        "hilma": {
+          "title": "XML-PDF-muunnin",
+          "org": "Tulli",
+          "deadline": null,
+          "published": "2025-12-31T04:05:02.558Z",
+          "winners": "DocPath Document Solutions S.L (B81771800)",
+          "totalValue": 2000000,
+          "valueCurrency": "EUR",
+          "contractExpiry": "2026-06-30T04:05:02.558Z"
+        }
+      }
+    ]
+  }
+]

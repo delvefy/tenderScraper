@@ -1,0 +1,39 @@
+[
+  {
+    "id": "2e7e189a-072d-47bc-a83e-b25ca22e4943",
+    "name": "Monitoring Public Bids to replace Tungsten Communications Manager",
+    "sites": [
+      "https://www.hankintailmoitukset.fi"
+    ],
+    "prompt": "Identify any government procurement notices, tenders, or RFPs where the contracting authority is Tulli (Finnish Customs)  for a public bid to replace a communications manager solution. Extract the direct links to those specific notices.",
+    "interval": "24h",
+    "active": true,
+    "createdAt": "2026-03-22T17:07:11.769Z",
+    "lastRunAt": "2026-03-22T18:28:12.764Z",
+    "lastRunStatus": "found"
+  },
+  {
+    "id": "e70df1b5-df1f-4480-b348-4f2c27bf6084",
+    "name": "Tulli — All active bids (HILMA)",
+    "hilmaKeyword": "tulli",
+    "sites": [],
+    "prompt": "Is this a procurement notice from Tulli (Finnish Customs) for IT systems, software, document management, or communications infrastructure?",
+    "interval": "24h",
+    "active": true,
+    "createdAt": "2026-03-22T18:42:31.938Z",
+    "lastRunAt": "2026-03-22T19:18:57.771Z",
+    "lastRunStatus": "found"
+  },
+  {
+    "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567890",
+    "name": "DocPath competitor mentions (HILMA)",
+    "hilmaKeyword": "DocPath",
+    "sites": [],
+    "prompt": "Does this procurement notice mention DocPath Document Solutions or DocPath software as an incumbent system being replaced, a named vendor, or a technology being procured? This is a competitor intelligence search.",
+    "interval": "24h",
+    "active": true,
+    "createdAt": "2026-03-22T19:00:00.000Z",
+    "lastRunAt": "2026-03-22T19:18:43.898Z",
+    "lastRunStatus": "found"
+  }
+]

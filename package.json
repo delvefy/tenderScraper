@@ -1,0 +1,20 @@
+{
+  "name": "publictender",
+  "version": "1.0.0",
+  "description": "Government procurement bid monitor with AI analysis",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^0.7.0",
+    "openai": "^4.96.0",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "express": "^4.21.2",
+    "node-cron": "^3.0.3",
+    "uuid": "^11.0.5"
+  }
+}

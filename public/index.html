@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PublicTender — Bid Monitor</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f3f4f8;
+      --surface: #ffffff;
+      --border: #dde1ea;
+      --text: #1a1d2e;
+      --muted: #6b7280;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --found: #059669;
+      --not-found: #6b7280;
+      --error: #dc2626;
+      --warn: #d97706;
+      --radius: 8px;
+      --gap: 16px;
+    }
+
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+           background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Header ── */
+    header { background: var(--surface); border-bottom: 1px solid var(--border);
+             padding: 0 24px; display: flex; align-items: center; gap: 24px; height: 56px; }
+    header h1 { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: -0.3px; }
+    header h1 span { color: var(--text); font-weight: 400; }
+
+    /* ── Tabs ── */
+    nav { display: flex; gap: 4px; }
+    nav button { background: none; border: none; color: var(--muted); cursor: pointer;
+                 padding: 6px 14px; border-radius: 6px; font-size: 14px; font-weight: 500;
+                 transition: color .15s, background .15s; }
+    nav button:hover { color: var(--text); background: rgba(0,0,0,.05); }
+    nav button.active { color: var(--accent); background: rgba(99,102,241,.1); }
+
+    /* ── Layout ── */
+    main { max-width: 960px; margin: 0 auto; padding: 24px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    h2 { font-size: 20px; font-weight: 600; margin-bottom: 20px; }
+
+    /* ── Cards ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: var(--gap); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    .card-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ── Forms ── */
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 5px; font-weight: 500; }
+    input[type="text"], input[type="password"], textarea, select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); border-radius: 6px; padding: 9px 12px; font-size: 14px;
+      font-family: inherit; outline: none; transition: border-color .15s; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+
+    /* ── Buttons ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; border: none; border-radius: 6px;
+           font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; transition: background .15s, opacity .15s; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+    .btn-secondary { background: rgba(0,0,0,.06); color: var(--text); }
+    .btn-secondary:hover:not(:disabled) { background: rgba(0,0,0,.1); }
+    .btn-danger { background: rgba(239,68,68,.15); color: var(--error); }
+    .btn-danger:hover:not(:disabled) { background: rgba(239,68,68,.25); }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Badges ── */
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px;
+             border-radius: 99px; letter-spacing: .3px; }
+    .badge-found { background: rgba(16,185,129,.15); color: var(--found); }
+    .badge-none   { background: rgba(107,114,128,.15); color: var(--muted); }
+    .badge-error  { background: rgba(239,68,68,.15); color: var(--error); }
+    .badge-active { background: rgba(99,102,241,.15); color: var(--accent); }
+    .badge-paused { background: rgba(107,114,128,.15); color: var(--muted); }
+
+    /* ── Monitor cards ── */
+    .monitor-card .sites-list { font-size: 12px; color: var(--muted); margin: 6px 0; }
+    .monitor-card .sites-list span { display: inline-block; background: rgba(0,0,0,.04);
+      border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; margin: 2px 2px 2px 0; }
+
+    /* ── Results log ── */
+    .result-entry { border-bottom: 1px solid var(--border); padding: 14px 0; }
+    .result-entry:last-child { border-bottom: none; }
+    .result-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .finding { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px;
+               border-radius: 6px; margin-bottom: 6px; background: rgba(0,0,0,.02);
+               border: 1px solid var(--border); }
+    .finding.found   { border-color: rgba(16,185,129,.3); background: rgba(16,185,129,.04); }
+    .finding.error   { border-color: rgba(239,68,68,.3);  background: rgba(239,68,68,.04); }
+    .finding-url { font-size: 12px; color: var(--accent); word-break: break-all; }
+    .finding-summary { font-size: 13px; margin-top: 3px; }
+    .finding-confidence { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .finding-tender-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .tender-link { font-size: 11px; font-weight: 500; color: var(--accent); background: rgba(99,102,241,.08);
+                   border: 1px solid rgba(99,102,241,.25); border-radius: 4px; padding: 2px 8px;
+                   text-decoration: none; word-break: break-all; }
+    .tender-link:hover { background: rgba(99,102,241,.15); text-decoration: underline; }
+    .finding-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Alert ── */
+    .alert { padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: var(--gap); }
+    .alert-success { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); color: var(--found); }
+    .alert-error   { background: rgba(239,68,68,.1);  border: 1px solid rgba(239,68,68,.3);  color: var(--error); }
+    .alert-info    { background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.3); color: var(--accent-hover); }
+
+    /* ── Empty state ── */
+    .empty { text-align: center; padding: 48px 24px; color: var(--muted); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty p { font-size: 14px; }
+
+    /* ── Modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex;
+                     align-items: flex-start; justify-content: center; padding: 60px 16px;
+                     z-index: 100; overflow-y: auto; }
+    .modal-overlay.hidden { display: none; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+             width: 100%; max-width: 560px; padding: 24px; }
+    .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 18px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+
+    /* ── Misc ── */
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .dot-active  { background: var(--found); }
+    .dot-paused  { background: var(--muted); }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,.15);
+               border-top-color: var(--accent); border-radius: 50%; animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .running-indicator { font-size: 12px; color: var(--warn); display: flex; align-items: center; gap: 6px; }
+
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .filter-bar { display: flex; gap: 8px; align-items: center; }
+    select.filter { width: auto; padding: 7px 10px; font-size: 13px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Public<span>Tender</span></h1>
+  <nav>
+    <button class="active" data-tab="dashboard">Dashboard</button>
+    <button data-tab="monitors">Monitors</button>
+    <button data-tab="settings">Settings</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ── Dashboard ── -->
+  <div id="tab-dashboard" class="tab-panel active">
+    <div class="section-header">
+      <h2>Dashboard</h2>
+      <div class="filter-bar">
+        <select id="resultFilter" class="filter">
+          <option value="">All monitors</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="clearResults()">Clear log</button>
+        <button class="btn btn-secondary btn-sm" onclick="loadDashboard()">↻ Refresh</button>
+      </div>
+    </div>
+    <div id="monitorSummary"></div>
+    <div id="resultsLog"></div>
+  </div>
+
+  <!-- ── Monitors ── -->
+  <div id="tab-monitors" class="tab-panel">
+    <div class="section-header">
+      <h2>Monitors</h2>
+      <button class="btn btn-primary" onclick="openMonitorModal()">+ New Monitor</button>
+    </div>
+    <div id="monitorsList"></div>
+  </div>
+
+  <!-- ── Settings ── -->
+  <div id="tab-settings" class="tab-panel">
+    <h2>Settings</h2>
+    <div id="settingsAlert"></div>
+    <div class="card">
+      <div class="card-title">AI Provider</div>
+      <div class="card-meta" style="margin-bottom:18px">Select the active provider with the radio button. Save each API key independently — keys are never exposed to the browser after saving.</div>
+      <div id="providerList" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+  </div>
+</main>
+
+<!-- ── Monitor Modal ── -->
+<div id="monitorModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 id="modalTitle">New Monitor</h3>
+    <input type="hidden" id="editMonitorId">
+    <div class="form-group">
+      <label>Monitor Name</label>
+      <input type="text" id="mName" placeholder="e.g. Tulli IT Bids">
+    </div>
+    <div class="form-group">
+      <label>Source Type</label>
+      <select id="mSourceType" onchange="onSourceTypeChange()">
+        <option value="url">Web URLs (scrape)</option>
+        <option value="hilma">HILMA — hankintailmoitukset.fi</option>
+      </select>
+    </div>
+    <div id="sourceUrl">
+      <div class="form-group">
+        <label>Sites to Monitor (one URL per line)</label>
+        <textarea id="mSites" rows="4" placeholder="https://example.gov/procurement&#10;https://tenders.example.com/rfp"></textarea>
+        <button class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="testScrape()">🔍 Test scrape first URL</button>
+      </div>
+      <div id="scrapeDebug" style="display:none;margin-bottom:12px"></div>
+    </div>
+    <div id="sourceHilma" style="display:none">
+      <div class="form-group">
+        <label>Organisation / Keyword to search on HILMA</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="mHilmaKeyword" placeholder="e.g. Tulli" style="flex:1">
+          <button class="btn btn-secondary" onclick="testHilma()">🔍 Test</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:5px">
+          Queries the HILMA API directly — no scraping needed. Pre-filters to notices where org name or title contains this keyword, then AI checks each one against your prompt.
+        </div>
+      </div>
+      <div id="hilmaDebug" style="display:none;margin-bottom:12px"></div>
+    </div>
+    <div class="form-group">
+      <label>AI Analysis Prompt</label>
+      <textarea id="mPrompt" rows="4" placeholder="Identify if this page contains a government bid to replace a communications manager solution by Tungsten Automation, or similar document management software."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="mActive">
+        <option value="true">Active</option>
+        <option value="false">Paused</option>
+      </select>
+    </div>
+    <div id="modalAlert"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeMonitorModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMonitor()">Save Monitor</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const runningMonitors = new Set();
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+    if (btn.dataset.tab === 'dashboard') loadDashboard();
+    if (btn.dataset.tab === 'monitors') loadMonitors();
+    if (btn.dataset.tab === 'settings') loadSettings();
+  });
+});
+
+// ── API helpers ───────────────────────────────────────────────────────────────
+async function api(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(path, opts);
+  return r.json();
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+const PROVIDER_PLACEHOLDERS = { gemini: 'AIza...', groq: 'gsk_...', openai: 'sk-...' };
+
+async function loadSettings() {
+  const s = await api('GET', '/api/settings');
+  const list = document.getElementById('providerList');
+  list.innerHTML = Object.entries(s.providers).map(([id, p]) => `
+    <div style="border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:14px 16px;
+         background:${s.activeProvider === id ? 'rgba(99,102,241,.07)' : 'rgba(0,0,0,.02)'};"
+         id="prow-${id}">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
+        <input type="radio" name="activeProvider" value="${id}"
+               ${s.activeProvider === id ? 'checked' : ''}
+               onchange="setActiveProvider('${id}')">
+        <div style="flex:1">
+          <span style="font-weight:600;color:var(--text)">${esc(p.label)}</span>
+          <span style="margin-left:8px;font-size:11px;padding:2px 7px;border-radius:4px;
+                background:rgba(255,255,255,.07);color:var(--muted)">${esc(p.model)}</span>
+        </div>
+        <span style="font-size:11px;color:var(--muted)">${esc(p.tier)}</span>
+        <span id="hasKey-${id}" style="font-size:12px;color:var(--found);min-width:60px;text-align:right">
+          ${p.hasKey ? '✓ Key saved' : ''}
+        </span>
+      </label>
+      <div style="display:flex;gap:8px;padding-left:26px">
+        <input type="password" id="key-${id}" placeholder="${PROVIDER_PLACEHOLDERS[id] || '...'}"
+               style="flex:1;font-size:13px">
+        <button class="btn btn-secondary" onclick="saveProviderKey('${id}')">Save key</button>
+      </div>
+    </div>`).join('');
+}
+
+async function setActiveProvider(id) {
+  const r = await api('POST', '/api/settings', { activeProvider: id });
+  if (r.ok) {
+    showAlert('settingsAlert', 'success', `Active provider set to ${id}.`);
+    loadSettings();
+  } else {
+    showAlert('settingsAlert', 'error', r.error || 'Failed to update provider.');
+  }
+}
+
+async function saveProviderKey(id) {
+  const key = document.getElementById(`key-${id}`).value.trim();
+  if (!key) { showAlert('settingsAlert', 'error', 'Please enter an API key.'); return; }
+  const r = await api('POST', '/api/settings', { providers: { [id]: { apiKey: key } } });
+  if (r.ok) {
+    showAlert('settingsAlert', 'success', `${id} API key saved.`);
+    document.getElementById(`key-${id}`).value = '';
+    loadSettings();
+  } else {
+    showAlert('settingsAlert', 'error', r.error || 'Failed to save key.');
+  }
+}
+
+// ── Monitors ──────────────────────────────────────────────────────────────────
+async function loadMonitors() {
+  const monitors = await api('GET', '/api/monitors');
+  const el = document.getElementById('monitorsList');
+  if (!monitors.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><p>No monitors yet. Create one to start tracking bids.</p></div>`;
+    return;
+  }
+  el.innerHTML = monitors.map(m => renderMonitorCard(m)).join('');
+}
+
+function renderMonitorCard(m) {
+  const running = runningMonitors.has(m.id);
+  const statusBadge = m.active
+    ? `<span class="badge badge-active">Active</span>`
+    : `<span class="badge badge-paused">Paused</span>`;
+  const lastRunBadge = m.lastRunStatus === 'found'
+    ? `<span class="badge badge-found">✓ Bid found</span>`
+    : m.lastRunStatus === 'none'
+    ? `<span class="badge badge-none">No match</span>` : '';
+  const lastRun = m.lastRunAt ? `Last run: ${formatDate(m.lastRunAt)}` : 'Never run';
+  const sourceTag = m.hilmaKeyword
+    ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;
+         background:rgba(99,102,241,.1);color:var(--accent);border:1px solid rgba(99,102,241,.25);
+         border-radius:4px;padding:1px 7px">🇫🇮 HILMA · ${esc(m.hilmaKeyword)}</span>`
+    : m.sites.map(s => `<span>${truncUrl(s)}</span>`).join('');
+
+  return `<div class="card monitor-card" id="mc-${m.id}">
+    <div class="card-header">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="status-dot ${m.active ? 'dot-active' : 'dot-paused'}"></span>
+          <span class="card-title">${esc(m.name)}</span>
+          ${statusBadge}
+          ${lastRunBadge}
+        </div>
+        <div class="card-meta">${lastRun}${m.hilmaKeyword ? '' : ` · ${m.sites.length} site(s)`}</div>
+        <div class="sites-list">${sourceTag}</div>
+      </div>
+    </div>
+    ${running ? `<div class="running-indicator"><div class="spinner"></div> Running analysis…</div>` : ''}
+    <div class="btn-group" style="margin-top:10px">
+      <button class="btn btn-primary btn-sm" onclick="runNow('${m.id}')" ${running ? 'disabled' : ''}>▶ Run Now</button>
+      <button class="btn btn-secondary btn-sm" onclick="openMonitorModal('${m.id}')">Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteMonitor('${m.id}')">Delete</button>
+    </div>
+  </div>`;
+}
+
+async function runNow(id) {
+  runningMonitors.add(id);
+  loadMonitors();
+  await api('POST', `/api/monitors/${id}/run`);
+  // Refresh at 10s, 30s, 60s to catch results as they come in
+  [10000, 30000, 60000].forEach(delay => setTimeout(() => {
+    runningMonitors.delete(id);
+    loadMonitors();
+    loadDashboard();
+  }, delay));
+}
+
+async function deleteMonitor(id) {
+  if (!confirm('Delete this monitor?')) return;
+  await api('DELETE', `/api/monitors/${id}`);
+  loadMonitors();
+  loadDashboard();
+}
+
+// ── Monitor Modal ─────────────────────────────────────────────────────────────
+function onSourceTypeChange() {
+  const t = document.getElementById('mSourceType').value;
+  document.getElementById('sourceUrl').style.display   = t === 'url'   ? '' : 'none';
+  document.getElementById('sourceHilma').style.display = t === 'hilma' ? '' : 'none';
+}
+
+async function openMonitorModal(id) {
+  document.getElementById('modalAlert').innerHTML = '';
+  document.getElementById('scrapeDebug').style.display = 'none';
+  document.getElementById('editMonitorId').value = id || '';
+  if (id) {
+    const monitors = await api('GET', '/api/monitors');
+    const m = monitors.find(x => x.id === id);
+    document.getElementById('modalTitle').textContent = 'Edit Monitor';
+    document.getElementById('mName').value = m.name;
+    document.getElementById('mPrompt').value = m.prompt;
+    document.getElementById('mActive').value = String(m.active);
+    if (m.hilmaKeyword) {
+      document.getElementById('mSourceType').value = 'hilma';
+      document.getElementById('mHilmaKeyword').value = m.hilmaKeyword;
+    } else {
+      document.getElementById('mSourceType').value = 'url';
+      document.getElementById('mSites').value = m.sites.join('\n');
+    }
+  } else {
+    document.getElementById('modalTitle').textContent = 'New Monitor';
+    document.getElementById('mName').value = '';
+    document.getElementById('mSites').value = '';
+    document.getElementById('mHilmaKeyword').value = '';
+    document.getElementById('mSourceType').value = 'url';
+    document.getElementById('mPrompt').value = 'Identify if this page contains a government procurement bid, RFP, or tender notice.';
+    document.getElementById('mActive').value = 'true';
+  }
+  onSourceTypeChange();
+  document.getElementById('monitorModal').classList.remove('hidden');
+}
+
+function closeMonitorModal() {
+  document.getElementById('monitorModal').classList.add('hidden');
+}
+
+document.getElementById('monitorModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeMonitorModal();
+});
+
+async function testHilma() {
+  const kw = document.getElementById('mHilmaKeyword').value.trim();
+  if (!kw) { showAlert('modalAlert', 'error', 'Enter a keyword first.'); return; }
+  const dbg = document.getElementById('hilmaDebug');
+  dbg.style.display = 'block';
+  dbg.innerHTML = `<div class="alert alert-info">Querying HILMA for "<strong>${esc(kw)}</strong>"…</div>`;
+  try {
+    const r = await api('GET', `/api/debug/hilma?keyword=${encodeURIComponent(kw)}`);
+    if (!r.ok) {
+      dbg.innerHTML = `<div class="alert alert-error">HILMA API error: ${esc(r.error)}</div>`;
+      return;
+    }
+    const rows = r.sample.length
+      ? r.sample.map(n => `
+        <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="font-weight:600;font-size:13px">${esc(n.title || '(no title)')}</div>
+          <div style="font-size:12px;color:var(--muted)">🏛 ${esc(n.org || '?')}
+            ${n.deadline ? `· ⏰ ${new Date(n.deadline).toLocaleDateString()}` : ''}
+            · ${esc(n.rawFields.mainType || '')}
+          </div>
+          <a href="${esc(n.url)}" target="_blank" style="font-size:11px;color:var(--accent)">${esc(n.url)}</a>
+        </div>`).join('')
+      : `<div style="color:var(--error);font-size:13px">No notices matched after org/title filter.</div>`;
+    dbg.innerHTML = `
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
+        <div style="display:flex;gap:20px;font-size:12px;font-weight:600;margin-bottom:10px">
+          <span>📡 API total: <strong>${r.total}</strong></span>
+          <span>📄 Returned: <strong>${r.returned}</strong></span>
+          <span>🎯 After filter: <strong style="color:${r.afterFilter > 0 ? 'var(--found)' : 'var(--error)'}">${r.afterFilter}</strong></span>
+        </div>
+        ${r.afterFilter === 0 ? `<div class="alert alert-error" style="margin-bottom:10px">
+          The API returned ${r.total} results but none had "${esc(kw)}" in the org name or title.<br>
+          Try a different keyword — check the exact organisation name on HILMA.
+        </div>` : ''}
+        <div style="font-weight:600;font-size:12px;margin-bottom:6px">Sample matches:</div>
+        ${rows}
+      </div>`;
+  } catch (e) {
+    dbg.innerHTML = `<div class="alert alert-error">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+async function testScrape() {
+  const firstUrl = document.getElementById('mSites').value.trim().split('\n')[0].trim();
+  if (!firstUrl) { showAlert('modalAlert', 'error', 'Enter at least one URL first.'); return; }
+  const dbg = document.getElementById('scrapeDebug');
+  dbg.style.display = 'block';
+  dbg.innerHTML = `<div class="alert alert-info">Scraping <code>${esc(firstUrl)}</code>…</div>`;
+  try {
+    const r = await api('GET', `/api/debug/scrape?url=${encodeURIComponent(firstUrl)}`);
+    if (!r.ok) {
+      dbg.innerHTML = `<div class="alert alert-error">Scrape failed: ${esc(r.error)}</div>`;
+      return;
+    }
+    const linkRows = r.links.length
+      ? r.links.map(l => `<div style="font-size:11px;padding:2px 0;border-bottom:1px solid var(--border)">
+          <a href="${esc(l.href)}" target="_blank" style="color:var(--accent);word-break:break-all">${esc(l.href)}</a>
+          ${l.text ? `<span style="color:var(--muted);margin-left:6px">${esc(l.text)}</span>` : ''}
+        </div>`).join('')
+      : '<em style="color:var(--error)">No links found — site is likely JavaScript-rendered (SPA). See suggestions below.</em>';
+    dbg.innerHTML = `
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:12px">
+        <div style="display:flex;gap:16px;margin-bottom:10px;font-weight:600">
+          <span>📄 Text: ${r.textLength} chars</span>
+          <span>🔗 Links found: ${r.linkCount}</span>
+        </div>
+        <details style="margin-bottom:10px">
+          <summary style="cursor:pointer;color:var(--muted);font-size:11px">Text preview (first 500 chars)</summary>
+          <pre style="margin-top:6px;white-space:pre-wrap;color:var(--text);font-size:11px;max-height:120px;overflow-y:auto">${esc(r.textPreview)}</pre>
+        </details>
+        <div style="margin-bottom:6px;font-weight:600">Links extracted:</div>
+        <div style="max-height:180px;overflow-y:auto">${linkRows}</div>
+        ${r.linkCount === 0 ? `<div class="alert alert-error" style="margin-top:10px">
+          ⚠️ <strong>No links extracted.</strong> This site likely renders content via JavaScript.<br>
+          <strong>Fix:</strong> Use the site's <strong>search API</strong> instead — open browser DevTools → Network tab → search for "tulli" on the site → find the JSON API call → use that URL as your monitor target.
+        </div>` : ''}
+      </div>`;
+  } catch (e) {
+    dbg.innerHTML = `<div class="alert alert-error">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+async function saveMonitor() {
+  const id = document.getElementById('editMonitorId').value;
+  const sourceType = document.getElementById('mSourceType').value;
+  const body = {
+    name:     document.getElementById('mName').value.trim(),
+    prompt:   document.getElementById('mPrompt').value.trim(),
+    active: document.getElementById('mActive').value === 'true',
+  };
+  if (sourceType === 'hilma') {
+    body.hilmaKeyword = document.getElementById('mHilmaKeyword').value.trim();
+    body.sites = [];
+    if (!body.hilmaKeyword) { showAlert('modalAlert', 'error', 'Enter a HILMA keyword.'); return; }
+  } else {
+    body.sites = document.getElementById('mSites').value.trim();
+    body.hilmaKeyword = null;
+    if (!body.sites) { showAlert('modalAlert', 'error', 'Enter at least one URL.'); return; }
+  }
+  if (!body.name || !body.prompt) {
+    showAlert('modalAlert', 'error', 'Name and prompt are required.'); return;
+  }
+  const r = id
+    ? await api('PUT', `/api/monitors/${id}`, body)
+    : await api('POST', '/api/monitors', body);
+  if (r.error) { showAlert('modalAlert', 'error', r.error); return; }
+  closeMonitorModal();
+  loadMonitors();
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const [monitors, results] = await Promise.all([
+    api('GET', '/api/monitors'),
+    api('GET', '/api/results?limit=100'),
+  ]);
+
+  // Populate filter
+  const filter = document.getElementById('resultFilter');
+  const currentFilter = filter.value;
+  filter.innerHTML = '<option value="">All monitors</option>' +
+    monitors.map(m => `<option value="${m.id}" ${currentFilter === m.id ? 'selected' : ''}>${esc(m.name)}</option>`).join('');
+
+  // Monitor summary row
+  const summaryEl = document.getElementById('monitorSummary');
+  if (monitors.length) {
+    const found = monitors.filter(m => m.lastRunStatus === 'found').length;
+    const active = monitors.filter(m => m.active).length;
+    summaryEl.innerHTML = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
+      ${statChip('📋', monitors.length, 'Total monitors')}
+      ${statChip('🟢', active, 'Active')}
+      ${statChip('✅', found, 'Found bids')}
+    </div>`;
+  } else {
+    summaryEl.innerHTML = '';
+  }
+
+  // Filter results
+  const filteredId = document.getElementById('resultFilter').value;
+  const filtered = filteredId ? results.filter(r => r.monitorId === filteredId) : results;
+  const logEl = document.getElementById('resultsLog');
+
+  if (!filtered.length) {
+    logEl.innerHTML = `<div class="empty"><div class="empty-icon">📭</div>
+      <p>${monitors.length ? 'No results yet. Run a monitor to see findings.' : 'Create a monitor first, then run it to see results here.'}</p></div>`;
+    return;
+  }
+
+  const monitorMap = Object.fromEntries(monitors.map(m => [m.id, m.name]));
+  logEl.innerHTML = filtered.map((r, i) => renderResult(r, monitorMap, i)).join('');
+}
+
+function shortError(msg) {
+  if (!msg) return '';
+  // Extract HTTP status: "HTTP 503" etc
+  const http = msg.match(/HTTP (\d{3})/);
+  if (http) return `HTTP ${http[1]}`;
+  // Extract bracketed status: "[429 Too Many Requests]" or "[404 Not Found]"
+  const bracket = msg.match(/\[(\d{3} [^\]]+)\]/);
+  if (bracket) return bracket[1];
+  // Fallback: first 80 chars
+  return msg.slice(0, 80) + (msg.length > 80 ? '…' : '');
+}
+
+function renderResult(r, monitorMap, runIndex) {
+  const name = monitorMap[r.monitorId] || r.monitorId;
+  const anyFound = r.findings.some(f => f.found);
+  const errCount = r.findings.filter(f => f.error).length;
+  const okCount  = r.findings.filter(f => !f.error).length;
+  const badgeStyle = anyFound
+    ? 'background:rgba(74,222,128,.15);color:var(--found)'
+    : errCount === r.findings.length
+      ? 'background:rgba(239,68,68,.12);color:var(--error)'
+      : 'background:rgba(255,255,255,.06);color:var(--muted)';
+
+  return `<div class="result-entry">
+    <div class="result-meta" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:4px;${badgeStyle}">
+        RUN ${runIndex + 1}
+      </span>
+      <strong style="color:var(--text)">${esc(name)}</strong>
+      <span style="color:var(--muted)">${formatDate(r.runAt)}</span>
+      <span style="color:var(--muted);font-size:12px">${r.findings.length} site(s)</span>
+      ${anyFound
+        ? `<span style="color:var(--found);font-size:12px">✓ Match found</span>`
+        : errCount
+          ? `<span style="color:var(--error);font-size:12px">✗ ${errCount} error(s)${okCount ? `, ${okCount} ok` : ''}</span>`
+          : `<span style="color:var(--muted);font-size:12px">No match</span>`}
+    </div>
+    ${r.findings.map(f => `
+      <div class="finding ${f.found ? 'found' : ''} ${f.error ? 'error' : ''}">
+        <span class="finding-icon">${f.found ? '✅' : f.error ? '❌' : '⬜'}</span>
+        <div style="flex:1;min-width:0">
+          ${f.hilma ? `
+            <div style="font-size:13px;font-weight:600;color:var(--text)">${esc(f.hilma.title)}</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:4px;display:flex;flex-wrap:wrap;gap:10px">
+              <span>🏛 ${esc(f.hilma.org)}</span>
+              ${f.hilma.published ? `<span>📅 ${new Date(f.hilma.published).toLocaleDateString()}</span>` : ''}
+              ${f.hilma.deadline ? `<span>⏰ Deadline: ${new Date(f.hilma.deadline).toLocaleDateString()}</span>` : ''}
+              ${f.hilma.contractExpiry ? `<span style="color:var(--warn)">📋 Contract until: ${new Date(f.hilma.contractExpiry).toLocaleDateString()}</span>` : ''}
+            </div>
+            ${f.hilma.winners ? `<div style="font-size:12px;margin-bottom:3px">🏆 <strong>Designated provider:</strong> ${esc(f.hilma.winners)}</div>` : ''}
+            ${f.hilma.totalValue ? `<div style="font-size:12px;margin-bottom:3px">💰 <strong>Contract value:</strong> ${Number(f.hilma.totalValue).toLocaleString()} ${esc(f.hilma.valueCurrency)}</div>` : ''}
+            ` : `
+            <div class="finding-url"><a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${esc(f.url)}</a></div>`}
+          ${f.error
+            ? `<div class="finding-summary" style="color:var(--error)">${esc(shortError(f.error))}</div>`
+            : `<div class="finding-summary">${esc(f.summary || '')}</div>`}
+          ${f.confidence ? `<div class="finding-confidence">Confidence: ${f.confidence}</div>` : ''}
+          ${f.hilma && f.url ? `<div class="finding-tender-links"><a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer" class="tender-link">🔗 View tender on HILMA</a></div>` : ''}
+          ${!f.hilma && f.links?.length ? `<div class="finding-tender-links">${f.links.map(l => `<a href="${esc(l)}" target="_blank" rel="noopener noreferrer" class="tender-link">${esc(tenderLinkLabel(l))}</a>`).join('')}</div>` : ''}
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+document.getElementById('resultFilter').addEventListener('change', loadDashboard);
+
+async function clearResults() {
+  if (!confirm('Clear all results?')) return;
+  await api('DELETE', '/api/results');
+  loadDashboard();
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+function statChip(icon, count, label) {
+  return `<div class="card" style="padding:12px 16px;flex:1;min-width:120px">
+    <div style="font-size:22px">${icon}</div>
+    <div style="font-size:24px;font-weight:700;margin:4px 0">${count}</div>
+    <div style="font-size:12px;color:var(--muted)">${label}</div>
+  </div>`;
+}
+
+function showAlert(id, type, msg) {
+  document.getElementById(id).innerHTML =
+    `<div class="alert alert-${type}" style="margin-bottom:12px">${esc(msg)}</div>`;
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function truncUrl(url) {
+  try { const u = new URL(url); return u.hostname + (u.pathname !== '/' ? u.pathname.slice(0,20) : ''); }
+  catch { return url.slice(0, 30); }
+}
+
+function esc(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function tenderLinkLabel(url) {
+  try {
+    const u = new URL(url);
+    // For hankintailmoitukset.fi style: /fi/public/procedure/7075/enotice/37258/...
+    const procMatch = u.pathname.match(/\/procedure\/(\d+)/);
+    const noticeMatch = u.pathname.match(/\/enotice\/(\d+)/);
+    if (procMatch && noticeMatch) return `Notice #${noticeMatch[1]} (Proc. ${procMatch[1]})`;
+    if (procMatch) return `Procedure #${procMatch[1]}`;
+    if (noticeMatch) return `Notice #${noticeMatch[1]}`;
+    // Fall back to last two path segments
+    const parts = u.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+    return parts.slice(-2).join('/') || u.hostname;
+  } catch { return url.slice(0, 60); }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadDashboard();
+loadSettings();
+</script>
+</body>
+</html>
