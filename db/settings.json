@@ -2,10 +2,10 @@
   "activeProvider": "groq",
   "providers": {
     "gemini": {
-      "apiKey": "AIzaSyB95QU3xjhL8zs24OCR-1FoCXimcmJ-Lpg"
+      "apiKey": ""
     },
     "groq": {
-      "apiKey": "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"
+      "apiKey": ""
     },
     "openai": {
       "apiKey": ""
